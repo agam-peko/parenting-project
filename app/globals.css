@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-14px); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.75) rotate(0deg); }
+  50%      { opacity: 1;   transform: scale(1.2)  rotate(20deg); }
+}
+
+@keyframes floatZ {
+  0%   { opacity: 0;   transform: translateY(0px)   translateX(0px); }
+  25%  { opacity: 0.8; }
+  100% { opacity: 0;   transform: translateY(-36px) translateX(7px); }
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.anim-fade-up {
+  animation: fadeSlideUp 0.7s ease-out forwards;
+}
+.anim-fade-up-delay {
+  opacity: 0;
+  animation: fadeSlideUp 0.7s ease-out 0.25s forwards;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0.45;
+  cursor: pointer;
+  filter: invert(0.3);
+}

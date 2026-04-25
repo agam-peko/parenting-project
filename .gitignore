@@ -1,16 +1,21 @@
-# macOS system files
-.DS_Store
+# deps
+/node_modules
+/.pnp
+.pnp.js
 
-# Editor folders
-.vscode/
-.idea/
+# next
+/.next/
+/out/
 
-# Environment variables (never commit secrets)
+# env
 .env
 .env.local
+.env.*.local
 
-# Logs
-*.log
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
 
-# Node (in case you add any tooling later)
-node_modules/
+# vercel
+.vercel
