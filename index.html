@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avio — Baby Mood Identifier</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:   #faf7f2;
+      --blush:   #f5e6e0;
+      --lavender:#e8e4f0;
+      --sage:    #deeae4;
+      --text:    #2d2926;
+      --muted:   #8a817a;
+      --accent:  #c9a99a;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 60px;
+    }
+
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.04em;
+      color: var(--text);
+    }
+
+    .logo span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      margin-left: 3px;
+      vertical-align: middle;
+      margin-bottom: 4px;
+    }
+
+    .nav-tag {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* HERO */
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+    }
+
+    .pill {
+      display: inline-block;
+      background: var(--lavender);
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 100px;
+      margin-bottom: 36px;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.6rem, 6vw, 4.4rem);
+      line-height: 1.12;
+      max-width: 700px;
+      margin-bottom: 24px;
+      color: var(--text);
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 440px;
+      line-height: 1.75;
+      margin-bottom: 52px;
+    }
+
+    /* CARDS */
+    .cards {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 80px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px 28px;
+      width: 210px;
+      text-align: left;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+    }
+
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 16px;
+    }
+
+    .card:nth-child(1) .card-icon { background: var(--blush); }
+    .card:nth-child(2) .card-icon { background: var(--lavender); }
+    .card:nth-child(3) .card-icon { background: var(--sage); }
+
+    .card h3 {
+      font-size: 0.88rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+      letter-spacing: 0.01em;
+    }
+
+    .card p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    /* DIVIDER */
+    .divider {
+      width: 48px;
+      height: 1px;
+      background: var(--accent);
+      margin: 0 auto 60px;
+      opacity: 0.5;
+    }
+
+    /* CONTACT */
+    .contact {
+      text-align: center;
+      padding: 0 24px 80px;
+    }
+
+    .contact-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .contact-number {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: var(--text);
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 12px;
+      transition: color 0.2s;
+    }
+
+    .contact-number:hover { color: var(--accent); }
+
+    .contact-sub {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      border-top: 1px solid rgba(0,0,0,0.06);
+      letter-spacing: 0.04em;
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 24px 28px; }
+      .cards { flex-direction: column; align-items: center; }
+      .card { width: 100%; max-width: 320px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">Avio<span></span></div>
+    <div class="nav-tag">Est. 2024</div>
+  </nav>
+
+  <section class="hero">
+    <div class="pill">Newborn Intelligence</div>
+    <h1>Your baby speaks.<br /><em>We translate.</em></h1>
+    <p class="subtitle">
+      Avio is the world's first baby mood identifier — giving new parents
+      the clarity and confidence to understand exactly what their newborn needs,
+      the moment they need it.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">🌙</div>
+        <h3>Real-Time Mood Detection</h3>
+        <p>Instantly identifies hunger, fatigue, discomfort, and contentment from your baby's cues.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">✦</div>
+        <h3>One &amp; Only</h3>
+        <p>The only dedicated mood identifier built exclusively for the first months of life.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌿</div>
+        <h3>Peace of Mind</h3>
+        <p>Less guessing, less anxiety. More presence, more connection with your newborn.</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="contact">
+      <p class="contact-label">Get in touch</p>
+      <a class="contact-number" href="tel:+919820699574">+91 98206 99574</a>
+      <p class="contact-sub">We're here every day, just like parenting.</p>
+    </div>
+  </section>
+
+  <footer>© 2024 Avio. All rights reserved.</footer>
+
+</body>
+</html>

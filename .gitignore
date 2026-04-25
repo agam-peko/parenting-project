@@ -1,0 +1,16 @@
+# macOS system files
+.DS_Store
+
+# Editor folders
+.vscode/
+.idea/
+
+# Environment variables (never commit secrets)
+.env
+.env.local
+
+# Logs
+*.log
+
+# Node (in case you add any tooling later)
+node_modules/
