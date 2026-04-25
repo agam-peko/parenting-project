@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { saveBabyProfile, getBabyProfile } from '@/lib/baby';
 
 export default function OnboardingPage() {
   const { status } = useSession();
@@ -18,20 +17,37 @@ export default function OnboardingPage() {
   useEffect(() => {
     if (status === 'unauthenticated') { router.replace('/login'); return; }
     if (status === 'authenticated') {
-      if (getBabyProfile()) {
-        router.replace('/dashboard'); // returning user — redirect silently, never show form
-      } else {
-        setReady(true); // new user — safe to show the form
-      }
+      fetch('/api/user/profile')
+        .then(res => res.json())
+        .then(profile => {
+          if (profile) {
+            router.replace('/dashboard'); // returning user — skip form
+          } else {
+            setReady(true); // new user — show form
+          }
+        })
+        .catch(() => setReady(true)); // on error, show form anyway
     }
   }, [status, router]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!name.trim()) return setError("Please enter your baby's name.");
     if (!dob)         return setError("Please enter your baby's date of birth.");
-    if (!gender)      return setError('Please select your baby\'s gender.');
+    if (!gender)      return setError("Please select your baby's gender.");
+
     setSaving(true);
-    saveBabyProfile({ name: name.trim(), dob, gender });
+    const res = await fetch('/api/user/profile', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ childName: name.trim(), dob, gender }),
+    });
+
+    if (!res.ok) {
+      setError('Something went wrong. Please try again.');
+      setSaving(false);
+      return;
+    }
+
     router.replace('/dashboard');
   };
 
@@ -46,7 +62,6 @@ export default function OnboardingPage() {
     >
       <div className="bg-white rounded-[28px] shadow-[0_8px_48px_rgba(0,0,0,0.07)] p-8 w-full max-w-sm anim-fade-up">
 
-        {/* Header */}
         <div className="text-center mb-8">
           <div className="w-14 h-14 rounded-full bg-blush flex items-center justify-center text-2xl mx-auto mb-4">
             🍼
@@ -59,7 +74,6 @@ export default function OnboardingPage() {
 
         <div className="space-y-5">
 
-          {/* Baby's name */}
           <div>
             <label className="block text-[0.7rem] font-medium tracking-[0.1em] uppercase text-muted mb-2">
               Baby's Name
@@ -73,7 +87,6 @@ export default function OnboardingPage() {
             />
           </div>
 
-          {/* Date of birth */}
           <div>
             <label className="block text-[0.7rem] font-medium tracking-[0.1em] uppercase text-muted mb-2">
               Date of Birth
@@ -87,7 +100,6 @@ export default function OnboardingPage() {
             />
           </div>
 
-          {/* Gender */}
           <div>
             <label className="block text-[0.7rem] font-medium tracking-[0.1em] uppercase text-muted mb-3">
               Gender
@@ -110,9 +122,7 @@ export default function OnboardingPage() {
             </div>
           </div>
 
-          {error && (
-            <p className="text-xs text-red-400">{error}</p>
-          )}
+          {error && <p className="text-xs text-red-400">{error}</p>}
 
           <button
             onClick={handleSave}
