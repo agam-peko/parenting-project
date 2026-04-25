@@ -18,31 +18,31 @@ export default function LoginPage() {
   if (status === 'loading' || status === 'authenticated') return null;
 
   return (
-    <div className="min-h-screen overflow-hidden">
+    <div className="overflow-hidden" style={{ height: '100dvh' }}>
       {/* Slider container — 200% wide, shifted by -50% to reveal screen 2 */}
       <div
         className="flex transition-transform duration-500 ease-in-out"
         style={{
           width: '200%',
-          minHeight: '100vh',
+          height: '100dvh',
           transform: screen === 1 ? 'translateX(0)' : 'translateX(-50%)',
         }}
       >
 
         {/* ── Screen 1: Welcome ── */}
         <div
-          className="flex flex-col relative"
+          className="flex flex-col relative overflow-hidden"
           style={{
             width: '50%',
-            minHeight: '100vh',
+            height: '100dvh',
             background: 'linear-gradient(160deg, #faf7f2 0%, #f5e6e0 55%, #e8e4f0 100%)',
           }}
         >
-          <div className="flex-1 flex flex-col items-center justify-between px-8 pt-14 pb-10">
+          <div className="h-full flex flex-col items-center justify-between px-8 pt-10 pb-8">
 
             {/* Headline */}
             <div className="text-center anim-fade-up">
-              <h1 className="font-serif text-[clamp(2.2rem,6vw,3.4rem)] leading-[1.15] text-avio-text mb-3">
+              <h1 className="font-serif text-[clamp(1.9rem,6vw,3.4rem)] leading-[1.15] text-avio-text mb-3">
                 Welcome to Avio
               </h1>
               <p className="text-[1rem] font-light text-muted leading-relaxed">
@@ -50,8 +50,10 @@ export default function LoginPage() {
               </p>
             </div>
 
-            {/* Baby illustration */}
-            <SleepingBaby className="w-full max-w-[280px] mx-auto" />
+            {/* Baby illustration — flex-1 so it fills remaining space and compresses on small screens */}
+            <div className="flex-1 flex items-center justify-center w-full min-h-0 overflow-hidden py-2">
+              <SleepingBaby className="w-full max-w-[260px]" />
+            </div>
 
             {/* CTA */}
             <button
@@ -66,8 +68,8 @@ export default function LoginPage() {
 
         {/* ── Screen 2: Sign in ── */}
         <div
-          className="flex flex-col items-center justify-center px-8 bg-cream"
-          style={{ width: '50%', minHeight: '100vh' }}
+          className="flex flex-col items-center justify-center px-8 bg-cream overflow-y-auto"
+          style={{ width: '50%', height: '100dvh' }}
         >
           <div className="w-full max-w-sm">
 

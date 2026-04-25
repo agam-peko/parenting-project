@@ -13,11 +13,17 @@ export default function OnboardingPage() {
   const [gender, setGender] = useState(null);
   const [error, setError]   = useState('');
   const [saving, setSaving] = useState(false);
+  const [ready, setReady]   = useState(false);
 
   useEffect(() => {
     if (status === 'unauthenticated') { router.replace('/login'); return; }
-    // Returning user — already set up, skip ahead
-    if (status === 'authenticated' && getBabyProfile()) router.replace('/dashboard');
+    if (status === 'authenticated') {
+      if (getBabyProfile()) {
+        router.replace('/dashboard'); // returning user — redirect silently, never show form
+      } else {
+        setReady(true); // new user — safe to show the form
+      }
+    }
   }, [status, router]);
 
   const handleSave = () => {
@@ -29,7 +35,7 @@ export default function OnboardingPage() {
     router.replace('/dashboard');
   };
 
-  if (status === 'loading' || status === 'unauthenticated') return null;
+  if (!ready) return null;
 
   const today = new Date().toISOString().split('T')[0];
 
