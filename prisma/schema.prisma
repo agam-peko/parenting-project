@@ -67,5 +67,6 @@ model UserContentFeedback {
   feedback  String
   createdAt DateTime @default(now()) @map("created_at")
 
+  @@unique([email, contentId])
   @@map("user_content_feedback")
 }
