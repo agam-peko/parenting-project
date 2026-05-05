@@ -59,3 +59,13 @@ model ContentActivities {
 
   @@map("content_activities")
 }
+
+model UserContentFeedback {
+  id        Int      @id @default(autoincrement())
+  contentId Int      @map("content_id")
+  email     String
+  feedback  String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("user_content_feedback")
+}
