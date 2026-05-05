@@ -15,5 +15,47 @@ model UserProfile {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  sessions  UserSession[]
+
   @@map("user_profile")
+}
+
+model UserSession {
+  id        Int      @id @default(autoincrement())
+  email     String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      UserProfile @relation(fields: [email], references: [email])
+
+  @@map("user_sessions")
+}
+
+model ContentMainCard {
+  mainCardId  Int    @id @default(autoincrement()) @map("main_card_id")
+  dayNumber   Int    @map("day_number")
+  weekNumber  Int    @map("week_number")
+  title       String
+  body        String
+
+  @@map("content_main_card")
+}
+
+model ContentProbablyNothing {
+  probablyNothingId Int    @id @default(autoincrement()) @map("probably_nothing_id")
+  dayNumber         Int    @map("day_number")
+  weekNumber        Int    @map("week_number")
+  title             String
+  body              String
+
+  @@map("content_probably_nothing")
+}
+
+model ContentActivities {
+  activityId Int    @id @default(autoincrement()) @map("activity_id")
+  dayNumber  Int    @map("day_number")
+  weekNumber Int    @map("week_number")
+  title      String
+  body       String
+
+  @@map("content_activities")
 }
