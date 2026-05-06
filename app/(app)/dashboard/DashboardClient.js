@@ -1,12 +1,37 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { signOut } from 'next-auth/react';
 
 export default function DashboardClient({ childName, dayNumber, weekNumber, mainCard, probablyNothings, activities, initialFeedback }) {
   const [feedback, setFeedback] = useState(initialFeedback);
   const [view, setView] = useState('main');
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  // Replace current history entry so swipe-back can't reach Google auth
+  useEffect(() => {
+    window.history.replaceState({ view: 'main' }, '');
+
+    const onPopState = (e) => {
+      const v = e.state?.view ?? 'main';
+      const idx = e.state?.selectedIndex ?? 0;
+      setView(v);
+      setSelectedIndex(idx);
+      // If we'd fall off the bottom of our history, push main back in
+      if (v === 'main') {
+        window.history.pushState({ view: 'main' }, '');
+      }
+    };
+
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+  const navigate = (nextView, idx = 0) => {
+    window.history.pushState({ view: nextView, selectedIndex: idx }, '');
+    setView(nextView);
+    setSelectedIndex(idx);
+  };
 
   const handleFeedback = useCallback(async (value) => {
     if (!mainCard) return;
@@ -21,11 +46,7 @@ export default function DashboardClient({ childName, dayNumber, weekNumber, main
     }
   }, [mainCard, feedback]);
 
-  const goBack = () => {
-    if (view === 'pn-detail')  { setView('pn-list');  return; }
-    if (view === 'tio-detail') { setView('tio-list'); return; }
-    setView('main');
-  };
+  const goBack = () => window.history.back();
 
   const hasPn  = probablyNothings?.length > 0;
   const hasTio = activities?.length > 0;
@@ -48,10 +69,6 @@ export default function DashboardClient({ childName, dayNumber, weekNumber, main
           <span className="font-serif text-lg text-avio-text">Avio</span>
         )}
 
-        <span className="text-[0.65rem] font-medium tracking-[0.12em] uppercase text-muted absolute left-1/2 -translate-x-1/2">
-          Dashboard
-        </span>
-
         <button
           onClick={() => signOut({ callbackUrl: '/login' })}
           className="text-[0.7rem] font-medium tracking-[0.08em] uppercase text-muted hover:text-avio-text transition-colors"
@@ -67,10 +84,10 @@ export default function DashboardClient({ childName, dayNumber, weekNumber, main
 
       {/* Card area */}
       <div className="flex-1 px-4 pb-8 flex flex-col">
-        {view === 'main'       && <MainCard mainCard={mainCard} dayNumber={dayNumber} weekNumber={weekNumber} feedback={feedback} onFeedback={handleFeedback} hasPn={hasPn} hasTio={hasTio} onPn={() => setView('pn-list')} onTio={() => setView('tio-list')} />}
-        {view === 'pn-list'    && <ListCard title="Probably Nothing" items={probablyNothings} itemKey="probablyNothingId" onSelect={i => { setSelectedIndex(i); setView('pn-detail'); }} />}
+        {view === 'main'       && <MainCard mainCard={mainCard} dayNumber={dayNumber} weekNumber={weekNumber} feedback={feedback} onFeedback={handleFeedback} hasPn={hasPn} hasTio={hasTio} onPn={() => navigate('pn-list')} onTio={() => navigate('tio-list')} />}
+        {view === 'pn-list'    && <ListCard title="Probably Nothing" items={probablyNothings} itemKey="probablyNothingId" onSelect={i => navigate('pn-detail', i)} />}
         {view === 'pn-detail'  && <DetailCard item={probablyNothings[selectedIndex]} contentId={probablyNothings[selectedIndex].probablyNothingId} />}
-        {view === 'tio-list'   && <ListCard title="Try It Out" items={activities} itemKey="activityId" onSelect={i => { setSelectedIndex(i); setView('tio-detail'); }} />}
+        {view === 'tio-list'   && <ListCard title="Try It Out" items={activities} itemKey="activityId" onSelect={i => navigate('tio-detail', i)} />}
         {view === 'tio-detail' && <DetailCard item={activities[selectedIndex]} contentId={activities[selectedIndex].activityId} />}
       </div>
     </div>

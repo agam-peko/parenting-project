@@ -33,6 +33,10 @@ export default function OnboardingPage() {
   const handleSave = async () => {
     if (!name.trim()) return setError("Please enter your baby's name.");
     if (!dob)         return setError("Please enter your baby's date of birth.");
+    const dobDate = new Date(dob);
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+    if (dobDate < sixMonthsAgo) return setError("Avio is designed for babies aged 0–6 months only.");
     if (!gender)      return setError("Please select your baby's gender.");
 
     setSaving(true);
@@ -88,9 +92,12 @@ export default function OnboardingPage() {
           </div>
 
           <div>
-            <label className="block text-[0.7rem] font-medium tracking-[0.1em] uppercase text-muted mb-2">
-              Date of Birth
-            </label>
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-[0.7rem] font-medium tracking-[0.1em] uppercase text-muted">
+                Date of Birth
+              </label>
+              <span className="text-[0.65rem] text-muted/60 font-light">Only for 0–6 months</span>
+            </div>
             <input
               type="date"
               value={dob}
@@ -129,7 +136,7 @@ export default function OnboardingPage() {
             disabled={saving}
             className="w-full bg-accent text-white text-sm font-medium rounded-full py-4 hover:bg-[#b8897a] transition-colors duration-200 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {saving ? 'Saving…' : 'Meet Avio →'}
+            {saving ? 'Saving…' : "Let's Begin"}
           </button>
         </div>
       </div>

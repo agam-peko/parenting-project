@@ -46,7 +46,7 @@ export default function LoginPage() {
                 Welcome to Avio
               </h1>
               <p className="text-[1rem] font-light text-muted leading-relaxed">
-                Everything your baby needs.
+                Understand your baby needs.
               </p>
             </div>
 
