@@ -15,9 +15,9 @@ export default function OnboardingForm({ today }) {
     if (!name.trim()) return setError("Please enter your baby's name.");
     if (!dob)         return setError("Please enter your baby's date of birth.");
     const dobDate = new Date(dob);
-    const sixMonthsAgo = new Date();
-    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-    if (dobDate < sixMonthsAgo) return setError("Avio is designed for babies aged 0–6 months only.");
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    if (dobDate < thirtyDaysAgo) return setError("Avio is designed for babies up to 1 month old only.");
     if (!gender)      return setError("Please select your baby's gender.");
 
     setSaving(true);
@@ -73,7 +73,7 @@ export default function OnboardingForm({ today }) {
               <label className="block text-[0.7rem] font-medium tracking-[0.1em] uppercase text-muted">
                 Date of Birth
               </label>
-              <span className="text-[0.65rem] text-muted/60 font-light">Only for 0–6 months</span>
+              <span className="text-[0.65rem] text-muted/60 font-light">Only for 0–1 month</span>
             </div>
             <input
               type="date"
