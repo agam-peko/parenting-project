@@ -69,9 +69,9 @@ export default function DashboardClient({ childName, dayNumber, weekNumber, main
       <div className="flex-1 px-4 pb-8 flex flex-col">
         {view === 'main'       && <MainCard mainCard={mainCard} dayNumber={dayNumber} weekNumber={weekNumber} feedback={feedback} onFeedback={handleFeedback} hasPn={hasPn} hasTio={hasTio} onPn={() => setView('pn-list')} onTio={() => setView('tio-list')} />}
         {view === 'pn-list'    && <ListCard title="Probably Nothing" items={probablyNothings} itemKey="probablyNothingId" onSelect={i => { setSelectedIndex(i); setView('pn-detail'); }} />}
-        {view === 'pn-detail'  && <DetailCard item={probablyNothings[selectedIndex]} />}
+        {view === 'pn-detail'  && <DetailCard item={probablyNothings[selectedIndex]} contentId={probablyNothings[selectedIndex].probablyNothingId} />}
         {view === 'tio-list'   && <ListCard title="Try It Out" items={activities} itemKey="activityId" onSelect={i => { setSelectedIndex(i); setView('tio-detail'); }} />}
-        {view === 'tio-detail' && <DetailCard item={activities[selectedIndex]} />}
+        {view === 'tio-detail' && <DetailCard item={activities[selectedIndex]} contentId={activities[selectedIndex].activityId} />}
       </div>
     </div>
   );
@@ -149,14 +149,14 @@ function MainCard({ mainCard, dayNumber, weekNumber, feedback, onFeedback, hasPn
 
 function ListCard({ title, items, itemKey, onSelect }) {
   return (
-    <div className="bg-white rounded-[28px] shadow-[0_8px_48px_rgba(0,0,0,0.07)] flex flex-col flex-1 p-6 anim-fade-up">
+    <div className="bg-white rounded-[28px] shadow-[0_8px_48px_rgba(0,0,0,0.07)] flex flex-col flex-1 p-6 anim-fade-up text-center">
       <h2 className="font-serif text-2xl text-avio-text mb-6">{title}</h2>
       <div className="space-y-3 flex-1">
         {items.map((item, i) => (
           <button
             key={item[itemKey]}
             onClick={() => onSelect(i)}
-            className="w-full text-left px-4 py-4 rounded-2xl bg-cream hover:bg-blush/40 transition-colors"
+            className="w-full text-center px-4 py-4 rounded-2xl bg-cream hover:bg-blush/40 transition-colors"
           >
             <span className="text-[0.9rem] font-medium text-avio-text">{item.title}</span>
           </button>
@@ -166,11 +166,43 @@ function ListCard({ title, items, itemKey, onSelect }) {
   );
 }
 
-function DetailCard({ item }) {
+function DetailCard({ item, contentId }) {
+  const [feedback, setFeedback] = useState(null);
+
+  const handleFeedback = async (value) => {
+    const next = feedback === value ? null : value;
+    setFeedback(next);
+    if (next) {
+      fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contentId, feedback: next }),
+      }).catch(() => {});
+    }
+  };
+
   return (
-    <div className="bg-white rounded-[28px] shadow-[0_8px_48px_rgba(0,0,0,0.07)] flex flex-col flex-1 p-6 anim-fade-up">
-      <h2 className="font-serif text-2xl leading-snug text-avio-text mb-5">{item.title}</h2>
+    <div className="bg-white rounded-[28px] shadow-[0_8px_48px_rgba(0,0,0,0.07)] flex flex-col flex-1 p-6 anim-fade-up text-center">
+      <h2 className="font-serif text-[28px] leading-snug text-avio-text mb-5">{item.title}</h2>
       <p className="text-[18px] font-light leading-[1.75] text-avio-text/80 flex-1">{item.body}</p>
+      <div className="flex justify-center gap-5 mt-6">
+        <button
+          onClick={() => handleFeedback('good')}
+          className={`transition-opacity duration-200 ${feedback === 'good' ? 'opacity-100' : 'opacity-25 hover:opacity-60'}`}
+          style={{ fontSize: 35 }}
+          aria-label="Helpful"
+        >
+          👍
+        </button>
+        <button
+          onClick={() => handleFeedback('bad')}
+          className={`transition-opacity duration-200 ${feedback === 'bad' ? 'opacity-100' : 'opacity-25 hover:opacity-60'}`}
+          style={{ fontSize: 35 }}
+          aria-label="Not helpful"
+        >
+          👎
+        </button>
+      </div>
     </div>
   );
 }
