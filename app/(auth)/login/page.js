@@ -1,25 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { signIn, useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { signIn } from 'next-auth/react';
 import SleepingBaby from '@/components/illustrations/SleepingBaby';
 
 export default function LoginPage() {
   const [screen, setScreen] = useState(1);
-  const { status } = useSession();
-  const router = useRouter();
-
-  // Already logged in — go straight to onboarding check
-  useEffect(() => {
-    if (status === 'authenticated') router.replace('/onboarding');
-  }, [status, router]);
-
-  if (status === 'loading' || status === 'authenticated') return null;
 
   return (
     <div className="overflow-hidden" style={{ height: '100dvh' }}>
-      {/* Slider container — 200% wide, shifted by -50% to reveal screen 2 */}
       <div
         className="flex transition-transform duration-500 ease-in-out"
         style={{
@@ -40,7 +29,6 @@ export default function LoginPage() {
         >
           <div className="h-full flex flex-col items-center justify-between px-8 pt-10 pb-8">
 
-            {/* Headline */}
             <div className="text-center anim-fade-up">
               <h1 className="font-serif text-[clamp(1.9rem,6vw,3.4rem)] leading-[1.15] text-avio-text mb-3">
                 Welcome to Avio
@@ -50,12 +38,10 @@ export default function LoginPage() {
               </p>
             </div>
 
-            {/* Baby illustration — flex-1 so it fills remaining space and compresses on small screens */}
             <div className="flex-1 flex items-center justify-center w-full min-h-0 overflow-hidden py-2">
               <SleepingBaby className="w-full max-w-[260px]" />
             </div>
 
-            {/* CTA */}
             <button
               onClick={() => setScreen(2)}
               className="anim-fade-up-delay w-full max-w-xs bg-accent text-white text-sm font-medium rounded-full py-4 hover:bg-[#b8897a] transition-colors duration-200 shadow-sm"
@@ -63,7 +49,6 @@ export default function LoginPage() {
               Get Started →
             </button>
           </div>
-
         </div>
 
         {/* ── Screen 2: Sign in ── */}
