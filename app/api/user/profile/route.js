@@ -18,8 +18,8 @@ export async function POST(req) {
   const email = session.user.email;
 
   await sql`
-    INSERT INTO user_profile (email, child_name, dob, gender)
-    VALUES (${email}, ${childName}, ${dob}, ${gender})
+    INSERT INTO user_profile (email, child_name, dob, gender, updated_at)
+    VALUES (${email}, ${childName}, ${dob}, ${gender}, NOW())
     ON CONFLICT (email) DO UPDATE SET child_name = ${childName}, dob = ${dob}, gender = ${gender}, updated_at = NOW()
   `;
 
