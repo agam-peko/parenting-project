@@ -17,8 +17,18 @@ const dmSerif = DM_Serif_Display({
 });
 
 export const metadata = {
-  title: 'Avio — Baby Mood Identifier',
-  description: 'The world\'s first baby mood identifier. Understand exactly what your newborn needs.',
+  title: 'Avio: Your Guide for 1st month',
+  description: 'Your daily companion for the first month with your newborn.',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Avio',
+  },
+  icons: {
+    icon: '/icon-512.png',
+    apple: '/icon-192.png',
+  },
 };
 
 export default function RootLayout({ children }) {
