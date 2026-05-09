@@ -102,9 +102,12 @@ function MainCard({ mainCard, dayNumber, weekNumber, feedback, onFeedback, hasPn
     <div className="bg-white rounded-[28px] shadow-[0_8px_48px_rgba(0,0,0,0.07)] flex flex-col flex-1 p-6 anim-fade-up text-center">
 
       {/* Today's Card */}
-      <h1 className="font-serif text-[40px] leading-tight text-avio-text mb-4">
+      <h1 className="font-serif text-[40px] leading-tight text-avio-text mb-1">
         Today's Card
       </h1>
+
+      {/* Sub-text */}
+      <p className="text-[14px] text-muted/50 mb-5">Get a new card everyday!</p>
 
       {/* Week · Day */}
       <p className="text-[14px] font-medium tracking-[0.1em] uppercase text-muted/60 mb-6">
@@ -167,15 +170,19 @@ function MainCard({ mainCard, dayNumber, weekNumber, feedback, onFeedback, hasPn
 function ListCard({ title, items, itemKey, onSelect }) {
   return (
     <div className="bg-white rounded-[28px] shadow-[0_8px_48px_rgba(0,0,0,0.07)] flex flex-col flex-1 p-6 anim-fade-up text-center">
-      <h2 className="font-serif text-2xl text-avio-text mb-6">{title}</h2>
+      <h2 className="font-serif text-2xl text-avio-text mb-1">{title}</h2>
+      <p className="text-[14px] text-muted/50 mb-6">
+        {title === 'Probably Nothing' ? "Things that look scary but aren't!" : 'Activities and Stories for your Child'}
+      </p>
       <div className="space-y-3 flex-1">
         {items.map((item, i) => (
           <button
             key={item[itemKey]}
             onClick={() => onSelect(i)}
-            className="w-full text-center px-4 py-4 rounded-2xl bg-cream hover:bg-blush/40 transition-colors"
+            className="w-full flex items-center justify-between px-4 py-4 rounded-2xl bg-cream hover:bg-blush/40 transition-colors"
           >
-            <span className="text-[0.9rem] font-medium text-avio-text">{item.title}</span>
+            <span className="flex-1 text-left text-[0.9rem] font-medium text-avio-text">{item.title}</span>
+            <span className="text-avio-text/40 text-lg ml-2">›</span>
           </button>
         ))}
       </div>
